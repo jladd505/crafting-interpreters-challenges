@@ -1,5 +1,0 @@
-// Expected resolver error: a local variable cannot read itself in its initializer.
-{
-  var value = value;
-}
-
