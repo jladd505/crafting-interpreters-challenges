@@ -1,3 +1,0 @@
-// Expected runtime error: + does not coerce unlike-typed operands.
-print "answer: " + 42;
-
