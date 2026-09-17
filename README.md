@@ -3,7 +3,6 @@
 This repository contains the runnable code submitted with the written challenge
 responses for Robert Nystrom's *Crafting Interpreters*.
 
-## Build and test
 
 ## Notes
 
