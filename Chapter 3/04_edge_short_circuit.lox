@@ -1,0 +1,12 @@
+// Edge case: and/or return operands and skip an unneeded right-hand side.
+var touched = false;
+fun touch() {
+  touched = true;
+  return "right";
+}
+
+print "left" or touch();
+print touched;
+print nil or touch();
+print touched;
+

@@ -1,0 +1,6 @@
+// jlox inherits IEEE 754 division results, but equality uses boxed Double.equals().
+print 1 / 0;
+print 0 / 0;
+var notANumber = 0 / 0;
+print notANumber == notANumber;
+print -0 == 0;
