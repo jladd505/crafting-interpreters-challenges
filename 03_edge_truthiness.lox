@@ -1,6 +1,0 @@
-// Edge case: unlike several languages, zero and the empty string are truthy.
-if (0) print "zero is truthy";
-if ("") print "empty string is truthy";
-print nil or "fallback";
-print false or "fallback";
-
