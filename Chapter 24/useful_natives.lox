@@ -1,0 +1,14 @@
+print sqrt(81);                 // 9
+print pow(2, 10);               // 1024
+print length("hello, Lox");     // 10
+print typeOf(123);              // number
+print typeOf("text");           // string
+
+var start = clock();
+var total = 0;
+for (var i = 0; i < 100000; i = i + 1) {
+  total = total + sqrt(i);
+}
+print total;
+print clock() - start;
+

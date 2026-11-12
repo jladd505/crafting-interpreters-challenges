@@ -1,0 +1,6 @@
+// Each line demonstrates a checked runtime error when run separately.
+sqrt("nine");
+sqrt(-1);
+pow(2);
+length(123);
+
