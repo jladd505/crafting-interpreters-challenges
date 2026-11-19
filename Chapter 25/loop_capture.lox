@@ -1,0 +1,12 @@
+var first;
+var second;
+
+for (var i = 1; i < 3; i = i + 1) {
+  fun capture() { print i; }
+  if (i == 1) first = capture;
+  if (i == 2) second = capture;
+}
+
+first();  // 1 with a fresh variable per iteration.
+second(); // 2 with a fresh variable per iteration.
+

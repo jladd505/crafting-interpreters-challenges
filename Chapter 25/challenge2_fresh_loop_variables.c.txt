@@ -1,0 +1,26 @@
+/*
+ * compiler.c, forStatement(): patch-ready core of the answer-key approach.
+ * Record the declared loop variable's token and local slot. Immediately before
+ * compiling the body, open a scope and make a shadow initialized from it.
+ */
+int innerVariable = -1;
+if (loopVariable != -1) {
+  beginScope();
+  emitBytes(OP_GET_LOCAL, (uint8_t)loopVariable);
+  addLocal(loopVariableName);
+  markInitialized();
+  innerVariable = current->localCount - 1;
+}
+
+statement();
+
+/* Copy explicit assignments in the body back to the outer loop-control slot. */
+if (loopVariable != -1) {
+  emitBytes(OP_GET_LOCAL, (uint8_t)innerVariable);
+  emitBytes(OP_SET_LOCAL, (uint8_t)loopVariable);
+  emitByte(OP_POP);
+
+  /* If captured, ending this scope closes the iteration's distinct upvalue. */
+  endScope();
+}
+

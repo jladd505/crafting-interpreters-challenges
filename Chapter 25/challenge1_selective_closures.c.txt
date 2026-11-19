@@ -1,0 +1,45 @@
+/* compiler.c: emit a raw ObjFunction when the function has no upvalues. */
+ObjFunction* function = endCompiler();
+uint8_t functionConstant = makeConstant(OBJ_VAL(function));
+if (function->upvalueCount > 0) {
+  emitBytes(OP_CLOSURE, functionConstant);
+  for (int i = 0; i < function->upvalueCount; i++) {
+    emitByte(compiler.upvalues[i].isLocal ? 1 : 0);
+    emitByte(compiler.upvalues[i].index);
+  }
+} else {
+  emitBytes(OP_CONSTANT, functionConstant);
+}
+
+/* vm.c: a frame may now contain either ObjFunction or ObjClosure. */
+static inline ObjFunction* getFrameFunction(CallFrame* frame) {
+  if (frame->function->type == OBJ_FUNCTION) {
+    return (ObjFunction*)frame->function;
+  }
+  return ((ObjClosure*)frame->function)->function;
+}
+
+static bool call(Obj* callee, ObjFunction* function, int argCount) {
+  if (argCount != function->arity) {
+    runtimeError("Expected %d arguments but got %d.",
+                 function->arity, argCount);
+    return false;
+  }
+  if (vm.frameCount == FRAMES_MAX) {
+    runtimeError("Stack overflow.");
+    return false;
+  }
+  CallFrame* frame = &vm.frames[vm.frameCount++];
+  frame->function = callee;
+  frame->ip = function->chunk.code;
+  frame->slots = vm.stackTop - argCount - 1;
+  return true;
+}
+
+/* callValue() must dispatch both cases. */
+case OBJ_CLOSURE:
+  return call((Obj*)AS_CLOSURE(callee),
+              AS_CLOSURE(callee)->function, argCount);
+case OBJ_FUNCTION:
+  return call((Obj*)AS_FUNCTION(callee), AS_FUNCTION(callee), argCount);
+
